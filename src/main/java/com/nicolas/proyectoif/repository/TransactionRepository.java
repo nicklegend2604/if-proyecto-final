@@ -89,9 +89,13 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
             "group by mes", nativeQuery = true)
     List<Object> findLastTxMonthBalance();
 
-    @Query(value = "select month(t.time_stamp), SUM(t.balance)\n" +
-            "from transaction t\n" +
-            "group by month(T.time_stamp)\n", nativeQuery = true)
+    @Query(value = "select parciales.mes, sum(parciales.balance), sum(parciales.cuenta)\n" +
+            "from (\n" +
+            "\tselect month(time_stamp) mes, sum(balance) balance , count(1) cuenta\n" +
+            "\tfrom transaction\n" +
+            "\tgroup by month(time_stamp), card_number\n" +
+            ") parciales\n" +
+            "group by parciales.mes", nativeQuery = true)
     List<Object> findMonthBalance();
 
     @Query(value = "select COUNT(*), t.card_number \n" +
