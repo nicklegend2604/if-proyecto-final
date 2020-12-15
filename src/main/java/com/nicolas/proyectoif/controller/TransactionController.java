@@ -1,6 +1,5 @@
 package com.nicolas.proyectoif.controller;
 
-import com.nicolas.proyectoif.entity.PruebaTest;
 import com.nicolas.proyectoif.entity.Transaction;
 import com.nicolas.proyectoif.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
