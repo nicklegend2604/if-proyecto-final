@@ -13,26 +13,25 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TransactionFactory {
     private static final Integer MIN_BAL = 50;
     private static final Integer MAX_BAL = 100000;
-    private static final LocalDate startDate = LocalDate.of(1990, 1, 1);
-    private static final LocalDate endDate = LocalDate.now();
     private static final String DEFAULT_DATE_FORMAT = "yyyyMMddHHmmss";
     private static final String PADDING_MASK = "00000000000000000";
     private static final Integer MAX_CARD_NUMBER = 100000;
     private static final Integer MIN_CARD_NUMBER = 1;
     private static final Integer ROUND_MULTIPLE = 50;
+    private static final Integer YEAR = 2020;
 
-    public Transaction createRandomZeroPadding() {
+    public Transaction createRandomZeroPadding(int month) {
         Transaction transaction = new Transaction();
         transaction.setBalance(getRandomBalance());
-        transaction.setTimeStamp(getRandomTimeStamp());
+        transaction.setTimeStamp(getRandomTimeStamp(month));
         transaction.setCardNumber(getRandomCardNumberZeroPadding());
         return transaction;
     }
 
-    public Transaction createRandomNoPadding() {
+    public Transaction createRandomNoPadding(int month) {
         Transaction transaction = new Transaction();
         transaction.setBalance(getRandomBalance());
-        transaction.setTimeStamp(getRandomTimeStamp());
+        transaction.setTimeStamp(getRandomTimeStamp(month));
         transaction.setCardNumber(getRandomCardNumber());
         return transaction;
     }
@@ -42,7 +41,10 @@ public class TransactionFactory {
         return ROUND_MULTIPLE * (Math.round(randomBalalance / ROUND_MULTIPLE));
     }
 
-    private String getRandomTimeStamp(){
+    private String getRandomTimeStamp(int month){
+        LocalDate startDate = LocalDate.of(YEAR, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(
+                startDate.getMonth().length(startDate.isLeapYear()));
         LocalDateTime randomDate = DateUtil.getRandomDateTime(startDate, endDate);
         return randomDate.format(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT));
     }
